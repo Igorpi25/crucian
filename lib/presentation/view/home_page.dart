@@ -1,20 +1,20 @@
+import 'package:crucian/presentation/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key, required this.viewmodel});
 
-  final String title;
+  final HomeViewmodel viewmodel;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      widget.viewmodel.plus();
     });
   }
 
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.viewmodel.title),
       ),
       body: Center(
         child: Column(
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${widget.viewmodel.counter}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
