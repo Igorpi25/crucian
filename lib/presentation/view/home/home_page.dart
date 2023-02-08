@@ -1,10 +1,9 @@
-import 'package:crucian/presentation/viewmodel/home_viewmodel.dart';
+import 'package:crucian/presentation/model/clicker.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.viewmodel});
-
-  final HomeViewmodel viewmodel;
+  final Clicker clicker;
+  const HomePage({super.key, required this.clicker});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,7 +13,7 @@ class _HomePageState extends State<HomePage> {
 
   void _incrementCounter() {
     setState(() {
-      widget.viewmodel.plus();
+      widget.clicker.plus();
     });
   }
 
@@ -22,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.viewmodel.title),
+        title: const Text('Crucian'),
       ),
       body: Center(
         child: Column(
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${widget.viewmodel.counter}',
+              '${widget.clicker.current}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
@@ -45,4 +44,10 @@ class _HomePageState extends State<HomePage> {
       ), 
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 }
