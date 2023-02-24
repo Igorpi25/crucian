@@ -1,9 +1,11 @@
-import 'package:crucian/presentation/model/clicker.dart';
+import 'package:crucian/presentation/boundary/outgoing.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  final Clicker clicker;
-  const HomePage({super.key, required this.clicker});
+  const HomePage({super.key, required this.incrementBoundary, required this.currentValue});
+
+  final IncrementBoundary incrementBoundary;
+  final int currentValue;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -13,7 +15,7 @@ class _HomePageState extends State<HomePage> {
 
   void _incrementCounter() {
     setState(() {
-      widget.clicker.plus();
+      widget.incrementBoundary.increment();
     });
   }
 
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${widget.clicker.current}',
+              '${widget.currentValue}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],

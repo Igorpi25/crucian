@@ -1,25 +1,56 @@
 import 'dart:developer';
 
 import 'package:crucian/presentation/app.dart';
-import 'package:crucian/presentation/boundary/repository.dart';
-import 'package:crucian/presentation/model/clicker.dart';
+import 'package:crucian/presentation/boundary/incoming.dart';
+import 'package:crucian/presentation/boundary/outgoing.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  final MockRepository repo = MockRepository();
 
-  runApp(App(repository: repo));
+  final UpdateService updateService = UpdateService();
+  final MockService mockService = MockService(updateBoundary: updateService);
+
+
+  final App app = App(incrementBoundary: mockService, loadInitialBoundary: mockService);
+  debugPrint('add listener');
+  updateService.add(app.updateListener);
+
+  runApp(app);
 }
 
-class MockRepository implements Repository{
+class MockService implements LoadInitialBoundary, IncrementBoundary {
+  final UpdateBoundary updateBoundary;
+
+  int current = 0;
+
+  MockService({required this.updateBoundary});
+
   @override
-  Future<Clicker> load() {
-    return Future.delayed(const Duration(seconds: 1), ()=> Clicker(2));
+  void increment() {
+    debugPrint('increment');
+    updateBoundary.updateValue(++current);
   }
 
   @override
-  void save(Clicker clicker) {
-    log('MockRepository save $clicker');
+  void loadInitial() {
+    debugPrint('loadInitial');
+    updateBoundary.updateValue(current);
+  }
+
+}
+
+class UpdateService implements UpdateBoundary {
+  final List<UpdateListener> listeners = [];
+
+  void add(UpdateListener listener) {
+    listeners.add(listener);
+  }
+  
+  @override
+  void updateValue(int newValue) {
+    for (var element in listeners) {
+      element.onUpdate(newValue);
+    }
   }
 
 }

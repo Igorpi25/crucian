@@ -1,5 +1,4 @@
 import 'package:crucian/main.dart';
-import 'package:crucian/presentation/boundary/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:crucian/presentation/app.dart';
@@ -7,8 +6,13 @@ import 'package:crucian/presentation/app.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    Repository mock = MockRepository();
-    await tester.pumpWidget(App(repository: mock));
+    final UpdateService updateService = UpdateService();
+    final MockService mockService = MockService(updateBoundary: updateService);
+
+    var app = App(incrementBoundary: mockService, loadInitialBoundary: mockService);
+    updateService.add(app.updateListener);
+
+    await tester.pumpWidget(app);
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
